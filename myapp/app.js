@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
-    res.send('한 라우터에 응답(res)을 두 번 이상 보내려고 할 때');
+    res.send('한 라우터에 응답(res)을 두 번 이상 보내려고 할 때'); 
     res.json({ hello : 'LEE' })
 });
 
