@@ -14,15 +14,33 @@ app.use((req, res, next) => {
 }, (req, res, next) => {
     console.log('모든 코드3에서 실행');
     next();
+}, (req, res, next) => {
+    try {
+        // console.log(notdefined);
+    } catch(error) {
+        next(error);
+    }
+
+    next();
 })
 // }, (req, res, next) => {
 //     throw new Error('Error');
 // })
 
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'index.html'));
+    /*
     res.send('한 라우터에 응답(res)을 두 번 이상 보내려고 할 때'); 
     res.json({ hello : 'LEE' })
+    */
+   next('route');
+}, (req, res, next) => {
+    console.log('실행안됨');
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+    console.log('실행됨');
 });
 
 app.get('/about', (req, res) => {
