@@ -1,9 +1,34 @@
 const express = require('express');
 const path = require('path');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+// const multer = require('multer');
 
 const app = express();
 
 app.set('port', process.env.PORT || 3000);
+
+app.use(morgan('dev'));
+//app.use(morgan('combined'));
+
+// app.use('/', express.static(__dirname, 'public'));
+
+app.use(cookieParser('LEE'));
+
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: 'LEE',
+    cookie: {
+        httpOnly: true,
+    },
+    name: 'connect.sid'
+}))
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.use((req, res, next) => {
     console.log('모든 코드1에서 실행');
@@ -29,21 +54,36 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'index.html'));
+
+    // req.session;
+
+    // req.cookies;
+    // req.signedCookies;
+    // res.cookie('name', encodeURIComponent('LEE'), {
+        
+    // })
+
+    // res.clearCookie('name', encodeURIComponent('LEE'), {
+
+    // })
+    // res.sendFile(path.join(__dirname, 'index.html'));
+
+    // req.body.name;
     /*
     res.send('한 라우터에 응답(res)을 두 번 이상 보내려고 할 때'); 
     res.json({ hello : 'LEE' })
     */
-   next('route');
+   // next('route');
 }, (req, res, next) => {
     console.log('실행안됨');
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-    console.log('실행됨');
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'index.html'));
+//     console.log('실행됨');
+// });
 
-app.get('/about', (req, res) => {
+app.get('/about', (req, res) => {    
     res.sendFile(path.join(__dirname, 'about.html'));
 });
 
