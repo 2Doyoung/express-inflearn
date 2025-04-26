@@ -29,6 +29,14 @@ app.use(session({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/', (req, res, next) => { 
+    if(req.session.id) {
+        express.static(__dirname, 'public')(req, res, next)
+    } else {
+        next();
+    }
+})
+
 
 app.use((req, res, next) => {
     console.log('모든 코드1에서 실행');
