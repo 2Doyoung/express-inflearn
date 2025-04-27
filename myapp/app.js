@@ -3,7 +3,7 @@ const path = require('path');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-// const multer = require('multer');
+const multer = require('multer');
 
 const app = express();
 
@@ -59,6 +59,33 @@ app.use((req, res, next) => {
 // }, (req, res, next) => {
 //     throw new Error('Error');
 // })
+
+const upload = multer({
+    storage: multer.diskStorage({
+        destination(req, file, done) {
+            done(null, 'uploads/');
+        },
+        filename(req, file, done) {
+            const ext = path.extname(file.originalname);
+            done(null, path.basename(file.originalname, ext) + Date.now() + ext);
+        },
+    }),
+    limits: { fileSize: 5 * 1024 * 1024 },
+});
+
+app.post('/upload', upload.single('image'), (req, res) => {
+    console.log(req.file);
+})
+
+app.post('/upload', upload.array('image'), (req, res) => {
+    console.log(req.files);
+})
+
+app.post('/upload', upload.fields([{ name: 'image1'}, {name: 'image2'}, {name: 'image3'}]), (req, res) => {
+    console.log(req.files.image1);
+    console.log(req.files.image2);
+    console.log(req.files.image3);
+})
 
 app.get('/', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'index.html'));
