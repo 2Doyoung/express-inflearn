@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', (req, res, next) => { 
     if(req.session.id) {
-        express.static(__dirname, 'public')(req, res, next)
+        express.static(__dirname, 'public')(req, res, next);
     } else {
         next();
     }
